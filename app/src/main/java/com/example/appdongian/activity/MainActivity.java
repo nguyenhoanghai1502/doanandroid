@@ -1,7 +1,6 @@
 package com.example.appdongian.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.AnticipateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,7 +24,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.appdongian.R;
 import com.example.appdongian.adapter.Loaispadapter;
@@ -42,8 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.appdongian.model.sanpham;
 import java.util.ArrayList;
-
-import kotlin.text.UStringsKt;
 
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -129,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                     case 4: {
-                        Intent intent = new Intent(MainActivity.this, ThongtinActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ThongtinKhachHangActivity.class);
                         startActivity(intent);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;

@@ -1,28 +1,30 @@
 package com.example.appdongian.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.appdongian.R;
 import com.example.appdongian.adapter.GiohangAdapter;
-import com.example.appdongian.model.GioHang;
 
 import java.text.DecimalFormat;
 
 public class GioHangActivity extends AppCompatActivity {
     ListView lstgiohang;
     TextView txtthongbao;
-    TextView txttongtien;
+    public static TextView txttongtien;
     Button btnThanhtoan, btnTieptucmuahang;
     Toolbar toolbargiohang;
     GiohangAdapter giohangAdapter;
@@ -34,9 +36,69 @@ public class GioHangActivity extends AppCompatActivity {
         ActionToolbar();
         Kiemtragiohang();
         EventListview();
+        CatchOnItemListView();
+        EventButton();
     }
 
-    private void EventListview() {
+    private void EventButton() {
+        btnTieptucmuahang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnThanhtoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MainActivity.manggiohang.size() > 0){
+                    Intent intent = new Intent(getApplicationContext(), ThongtinKhachHangActivity.class);
+                    startActivity(intent);
+                }else{
+                }
+            }
+        });
+    }
+
+    private void CatchOnItemListView() {
+        lstgiohang.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(GioHangActivity.this);
+                builder.setTitle("Xác nhận xóa sản phẩm!");
+                builder.setMessage("Bạn có chắc chắn xóa sản phẩm này?");
+                builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (MainActivity.manggiohang.size() <= 0){
+                            txtthongbao.setVisibility(View.VISIBLE);
+                        }else{
+                            MainActivity.manggiohang.remove(position);
+                            giohangAdapter.notifyDataSetChanged();
+                            EventListview();
+                            if (MainActivity.manggiohang.size() <= 0){
+                                txtthongbao.setVisibility(View.VISIBLE);
+                            }else{
+                                txtthongbao.setVisibility(View.INVISIBLE);
+                                giohangAdapter.notifyDataSetChanged();
+                                EventListview();
+                            }
+                        }
+                    }
+                });
+                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        giohangAdapter.notifyDataSetChanged();
+                        EventListview();
+                    }
+                });
+                builder.show();
+                return false;
+            }
+        });
+    }
+    public static  void EventListview() {
         long tongtien=0;
         for(int i=0;i<MainActivity.manggiohang.size();i++){
             tongtien+=MainActivity.manggiohang.get(i).getGiasp();
