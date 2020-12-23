@@ -1,5 +1,6 @@
 package com.example.appdongian.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -28,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.appdongian.R;
 import com.example.appdongian.adapter.Loaispadapter;
 import com.example.appdongian.adapter.Sanphamadapter;
+import com.example.appdongian.model.GioHang;
 import com.example.appdongian.model.Loaisp;
 import com.example.appdongian.ultil.server;
 import com.google.android.material.navigation.NavigationView;
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     String hinhanhsanpham = "";
     String motasanpham = "";
     int idsanpham = 0;
+    public static ArrayList<GioHang> manggiohang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
         Getdulieumoinhat();
         //sự kiện khi click vào một loại sản phẩm trong menu
         SukienItemlistview();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menugiohang:
+                Intent intent=new Intent(getApplicationContext(), GioHangActivity.class);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void SukienItemlistview() {
@@ -174,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         });
         requestQueue.add(jsonArrayRequest);
     }
+
     private void ActionBar(){
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -185,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void Anhxa() {
         toolbar= (Toolbar) findViewById(R.id.toolbarmanhinhchinh);
         viewFlipper=(ViewFlipper) findViewById(R.id.viewflipper);
@@ -203,7 +225,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewmanhinhchinh.setHasFixedSize(true);
         recyclerViewmanhinhchinh.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
         recyclerViewmanhinhchinh.setAdapter(sanphamadapter);
+
+        if(manggiohang!=null){
+            //kiem tra xem mang gio hang da co chua
+        }else{
+            //neu chua co thi tao moi
+            manggiohang=new ArrayList<>();
+        }
     }
+
     //Lay du lieu tu json cho thanh menu
     private void Getdulieusanpham(){
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
